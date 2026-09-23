@@ -2,21 +2,7 @@
 
 import { CheckCircle2, ChevronRight, Clock, FileText, MapPin, Upload } from "lucide-react";
 import Image from "next/image";
-import { submitApplication } from "@/lib/submitApplication";
-import { toast } from "@/lib/toast";
-import {
-  INVALID_FORM_MESSAGE,
-  compactErrors,
-  focusFirstError,
-  toMobileDigits,
-  validateEmail,
-  validateMobile,
-  validateName,
-} from "@/lib/validation";
 import { useRef, useState } from "react";
-
-const RESUME_MAX_BYTES = 4 * 1024 * 1024;
-const MAX_EXPERIENCE_YEARS = 50;
 
 export default function CareerPage() {
   const formRef = useRef(null);
@@ -37,13 +23,10 @@ export default function CareerPage() {
   const [resumeName, setResumeName] = useState("");
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState("");
 
   // Handle Input Changes
   const handleInputChange = e => {
-    const { name } = e.target;
-    const value = name === "phone" ? toMobileDigits(e.target.value) : e.target.value;
+    const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     if (formErrors[name]) {
       setFormErrors(prev => ({ ...prev, [name]: "" }));
@@ -55,18 +38,12 @@ export default function CareerPage() {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const fileExt = file.name.split(".").pop().toLowerCase();
-      // Clear the input so picking the same file again still fires onChange
-      e.target.value = "";
 
-      let fileError = "";
       if (!["pdf", "doc", "docx"].includes(fileExt)) {
-        fileError = "Only PDF or DOC/DOCX files are supported.";
-      } else if (file.size > RESUME_MAX_BYTES) {
-        fileError = "Resume must be 4MB or smaller.";
-      }
-      if (fileError) {
-        setFormErrors(prev => ({ ...prev, resume: fileError }));
-        toast.error(fileError);
+        setFormErrors(prev => ({
+          ...prev,
+          resume: "Only PDF or DOC/DOCX files are supported.",
+        }));
         return;
       }
       setResume(file);
@@ -84,62 +61,39 @@ export default function CareerPage() {
   };
 
   // Submit Handler
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    if (isSubmitting) return;
-    const experience = formData.experience.trim();
-    const errors = compactErrors({
-      fullName: validateName(formData.fullName),
-      email: validateEmail(formData.email),
-      phone: validateMobile(formData.phone),
-      position: formData.position ? "" : "Please select a position",
-      experience: !experience
-        ? "Experience in years is required"
-        : !/^\d{1,2}(\.\d)?$/.test(experience) || Number(experience) > MAX_EXPERIENCE_YEARS
-          ? `Enter experience between 0 and ${MAX_EXPERIENCE_YEARS} years`
-          : "",
-      resume: resume ? "" : "Please upload your resume",
-    });
+    const errors = {};
+    if (!formData.fullName.trim()) errors.fullName = "Full name is required";
+    if (!formData.email.trim()) {
+      errors.email = "Email address is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = "Please enter a valid email address";
+    }
+    if (!formData.phone.trim()) errors.phone = "Phone number is required";
+    if (!formData.position) errors.position = "Please select a position";
+    if (!formData.experience.trim()) errors.experience = "Experience in years is required";
+    if (!resume) errors.resume = "Please upload your resume";
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
-      toast.error(INVALID_FORM_MESSAGE);
-      focusFirstError(e.currentTarget, errors);
       return;
     }
 
-    setIsSubmitting(true);
-    setSubmitError("");
-    try {
-      await submitApplication({
-        name: formData.fullName,
-        email: formData.email,
-        phone: formData.phone,
-        position: formData.position,
-        experience: formData.experience,
-        coverLetter: formData.coverLetter,
-        resume,
-      });
-      setIsSubmitted(true);
-      toast.success("Application submitted successfully!");
-      // Reset form after submission
-      setFormData({
-        fullName: "",
-        email: "",
-        phone: "",
-        position: "",
-        experience: "",
-        coverLetter: "",
-      });
-      setResume(null);
-      setResumeName("");
-      setFormErrors({});
-    } catch (error) {
-      setSubmitError(error.message);
-      toast.error(error.message);
-    } finally {
-      setIsSubmitting(false);
-    }
+    // Success simulation
+    setIsSubmitted(true);
+    // Reset form after submission
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      position: "",
+      experience: "",
+      coverLetter: "",
+    });
+    setResume(null);
+    setResumeName("");
+    setFormErrors({});
   };
 
   return (
@@ -314,7 +268,7 @@ export default function CareerPage() {
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full" noValidate>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
               {/* Full Name */}
               <div className="flex flex-col gap-1.5">
                 <label
@@ -330,8 +284,8 @@ export default function CareerPage() {
                   value={formData.fullName}
                   onChange={handleInputChange}
                   placeholder="John Doe"
-                  className={`w-full h-11 px-4 rounded-xl border ${
-                    formErrors.fullName ? "border-red-400 bg-red-50/40" : "border-transparent bg-[#fafafa]"
+                  className={`w-full h-11 px-4 rounded-xl ${
+                    formErrors.fullName ? "bg-red-50/10" : "bg-[#fafafa]"
                   } text-[14px] font-sans focus:outline-none transition-colors`}
                 />
                 {formErrors.fullName && (
@@ -354,8 +308,8 @@ export default function CareerPage() {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="johndoe@example.com"
-                  className={`w-full h-11 px-4 rounded-xl border ${
-                    formErrors.email ? "border-red-400 bg-red-50/40" : "border-transparent bg-[#fafafa]"
+                  className={`w-full h-11 px-4 rounded-xl ${
+                    formErrors.email ? "bg-red-50/10" : "bg-[#fafafa]"
                   } text-[14px] font-sans focus:outline-none transition-colors`}
                 />
                 {formErrors.email && (
@@ -373,15 +327,13 @@ export default function CareerPage() {
                 </label>
                 <input
                   type="tel"
-                  inputMode="numeric"
                   id="phone"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  placeholder="10-digit mobile number"
-                  maxLength={10}
-                  className={`w-full h-11 px-4 rounded-xl border ${
-                    formErrors.phone ? "border-red-400 bg-red-50/40" : "border-transparent bg-[#fafafa]"
+                  placeholder="+91 98765 43210"
+                  className={`w-full h-11 px-4 rounded-xl ${
+                    formErrors.phone ? "bg-red-50/10" : "bg-[#fafafa]"
                   } text-[14px] font-sans focus:outline-none transition-colors`}
                 />
                 {formErrors.phone && (
@@ -402,8 +354,8 @@ export default function CareerPage() {
                   name="position"
                   value={formData.position}
                   onChange={handleInputChange}
-                  className={`w-full h-11 px-3.5 rounded-xl border ${
-                    formErrors.position ? "border-red-400 bg-red-50/40" : "border-transparent bg-[#fafafa]"
+                  className={`w-full h-11 px-3.5 rounded-xl ${
+                    formErrors.position ? "bg-red-50/10" : "bg-[#fafafa]"
                   } text-[14px] font-sans text-[#525252] focus:outline-none transition-colors`}
                 >
                   <option value="">Select a Position</option>
@@ -430,13 +382,12 @@ export default function CareerPage() {
                   id="experience"
                   name="experience"
                   min="0"
-                  max={MAX_EXPERIENCE_YEARS}
-                  step="0.5"
+                  max="40"
                   value={formData.experience}
                   onChange={handleInputChange}
                   placeholder="3"
-                  className={`w-full h-11 px-4 rounded-xl border ${
-                    formErrors.experience ? "border-red-400 bg-red-50/40" : "border-transparent bg-[#fafafa]"
+                  className={`w-full h-11 px-4 rounded-xl ${
+                    formErrors.experience ? "bg-red-50/10" : "bg-[#fafafa]"
                   } text-[14px] font-sans focus:outline-none transition-colors`}
                 />
                 {formErrors.experience && (
@@ -462,7 +413,6 @@ export default function CareerPage() {
                   <input
                     type="file"
                     id="resume"
-                    name="resume"
                     accept=".pdf,.doc,.docx"
                     onChange={handleFileChange}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
@@ -486,7 +436,7 @@ export default function CareerPage() {
                           Upload File
                         </span>
                         <span className="font-sans text-[11px] text-neutral-400">
-                          PDF, DOC, or DOCX up to 4MB
+                          PDF, DOC, or DOCX up to 5MB
                         </span>
                       </>
                     )}
@@ -516,19 +466,12 @@ export default function CareerPage() {
                 />
               </div>
 
-              {submitError && (
-                <p className="font-sans text-[13px] text-red-500" role="alert">
-                  {submitError}
-                </p>
-              )}
-
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full h-11 !bg-[#0B2545] hover:bg-[#2C578B] text-white font-sans text-[14px] font-medium rounded-xl transition-all duration-200 cursor-pointer shadow-sm hover:shadow-[0_4px_12px_rgba(44,87,139,0.2)] mt-2 disabled:cursor-not-allowed disabled:opacity-70"
+                className="w-full h-11 !bg-[#0B2545] hover:bg-[#2C578B] text-white font-sans text-[14px] font-medium rounded-xl transition-all duration-200 cursor-pointer shadow-sm hover:shadow-[0_4px_12px_rgba(44,87,139,0.2)] mt-2"
               >
-                {isSubmitting ? "Submitting..." : "Submit Application"}
+                Submit Application
               </button>
             </form>
           )}

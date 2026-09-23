@@ -66,7 +66,7 @@ export default function WhyPartnerSection() {
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-16 items-start lg:items-start">
         {/* Left Side: Text Details */}
-        <div className="col-span-full lg:col-span-5 flex flex-col gap-3 sm:gap-4 lg:gap-5 lg:sticky lg:top-24">
+        <div className="col-span-12 lg:col-span-5 flex flex-col gap-3 sm:gap-4 lg:gap-5 lg:sticky lg:top-24">
           <Badge label="Why Partner With Us" className="text-[#2c578b] bg-[#2c578b]/10 w-fit" />
           <h2
             id="why-partner-heading"
@@ -87,7 +87,7 @@ export default function WhyPartnerSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
-          className="col-span-full lg:col-span-7 flex flex-col gap-3 sm:gap-4 lg:gap-5 w-full"
+          className="col-span-12 lg:col-span-7 flex flex-col gap-3 sm:gap-4 lg:gap-5 w-full"
         >
           {benefits.map((benefit, index) => (
             <motion.div

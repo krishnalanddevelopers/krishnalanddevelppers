@@ -7,13 +7,13 @@ export const metadata = {
 };
 
 const NAVAGAM_GALLERY_IMAGES = {
-  curvedBlue: "/gallery/navagam/2BHK_1.png",
-  skyscraper: "/gallery/navagam/2BHK_2.png",
-  bedroom: "/gallery/navagam/Club House (2).png",
-  tallVilla: "/gallery/navagam/2BHK_1.png",
-  studyRoom: "/gallery/navagam/cluehouse2.png",
-  poolHouse: "/gallery/navagam/kidsplayaera.png",
-  darkSkyscrapers: "/gallery/navagam/opengym1.png",
+  curvedBlue: "/gallery/navgam/2BHK_1.png",
+  skyscraper: "/gallery/navgam/2BHK_2.png",
+  bedroom: "/gallery/navgam/Club House (2).png",
+  tallVilla: "/gallery/navgam/2BHK_1.png",
+  studyRoom: "/gallery/navgam/cluehouse2.png",
+  poolHouse: "/gallery/navgam/kidsplayaera.png",
+  darkSkyscrapers: "/gallery/navgam/opengym1.png",
 };
 
 export default function NavagamGalleryPage() {

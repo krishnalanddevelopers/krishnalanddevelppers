@@ -68,7 +68,7 @@ export default function PrivacyContent() {
         </div>
 
         {/* Right Column: Detailed copy & CTA (9/12) */}
-        <div className="col-span-full lg:col-span-9 flex flex-col gap-10 font-sans text-[15px] text-[#404040] leading-[26px] font-normal">
+        <div className="col-span-12 lg:col-span-9 flex flex-col gap-10 font-sans text-[15px] text-[#404040] leading-[26px] font-normal">
           {/* Section 1: Introduction */}
           <div
             id="intro"

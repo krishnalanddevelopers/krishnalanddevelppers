@@ -3,26 +3,10 @@
 import Badge from "@/components/ui/Badge";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, UserCheck } from "lucide-react";
-import { PARTNER_EXPERIENCE_OPTIONS, submitPartner } from "@/lib/submitPartner";
-import { toast } from "@/lib/toast";
-import {
-  INVALID_FORM_MESSAGE,
-  compactErrors,
-  focusFirstError,
-  toMobileDigits,
-  validateEmail,
-  validateMobile,
-  validateName,
-} from "@/lib/validation";
 import { useState } from "react";
-
-// Approximate client count, e.g. "50", "50+", "20-30"
-const CLIENTS_COUNT_RE = /^\d+(\s*[-–]\s*\d+)?\+?$/;
 
 export default function PartnerFormSection() {
   const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState("");
   const [formData, setFormData] = useState({
     fullName: "",
     mobile: "",
@@ -39,27 +23,30 @@ export default function PartnerFormSection() {
   const [errors, setErrors] = useState({});
 
   const validate = () => {
-    const tempErrors = compactErrors({
-      fullName: validateName(formData.fullName),
-      email: validateEmail(formData.email),
-      mobile: validateMobile(formData.mobile),
-      city: validateName(formData.city, "City"),
-      clientsCount:
-        formData.clientsCount.trim() && !CLIENTS_COUNT_RE.test(formData.clientsCount.trim())
-          ? "Enter a number, e.g. 50 or 50+"
-          : "",
-      consent: formData.consent ? "" : "You must agree to receive communications",
-    });
+    const tempErrors = {};
+    if (!formData.fullName.trim()) tempErrors.fullName = "Full Name is required";
+    if (!formData.mobile.trim()) {
+      tempErrors.mobile = "Mobile Number is required";
+    } else if (!/^\d{10}$/.test(formData.mobile.trim())) {
+      tempErrors.mobile = "Must be a valid 10-digit mobile number";
+    }
+    if (!formData.email.trim()) {
+      tempErrors.email = "Email ID is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      tempErrors.email = "Must be a valid email address";
+    }
+    if (!formData.city.trim()) tempErrors.city = "City is required";
+    if (!formData.consent) tempErrors.consent = "You must agree to receive communications";
 
     setErrors(tempErrors);
-    return tempErrors;
+    return Object.keys(tempErrors).length === 0;
   };
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : name === "mobile" ? toMobileDigits(value) : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
     // Clear error
     if (errors[name]) {
@@ -67,38 +54,11 @@ export default function PartnerFormSection() {
     }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    if (isSubmitting) return;
-    const tempErrors = validate();
-    if (Object.keys(tempErrors).length > 0) {
-      toast.error(INVALID_FORM_MESSAGE);
-      focusFirstError(e.currentTarget, tempErrors);
-      return;
-    }
-
-    setIsSubmitting(true);
-    setSubmitError("");
-    try {
-      await submitPartner({
-        name: formData.fullName,
-        email: formData.email,
-        phone: formData.mobile,
-        city: formData.city,
-        experience: formData.experience,
-        preferredLocation: formData.preferredLocation,
-        companyName: formData.companyName,
-        clientsCount: formData.clientsCount,
-        message: formData.message,
-        consent: formData.consent,
-      });
+    if (validate()) {
+      // API call placeholder
       setSubmitted(true);
-      toast.success("Channel partner registration submitted!");
-    } catch (error) {
-      setSubmitError(error.message);
-      toast.error(error.message);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -202,7 +162,6 @@ export default function PartnerFormSection() {
                     </label>
                     <input
                       type="tel"
-                      inputMode="numeric"
                       id="mobile"
                       name="mobile"
                       value={formData.mobile}
@@ -257,11 +216,10 @@ export default function PartnerFormSection() {
                       className="h-11 px-4 rounded-xl border border-[#e5e5e5] bg-white font-sans text-[14px] text-[#171717] focus:outline-none focus:border-[#2c578b] focus:ring-1 focus:ring-[#2c578b] transition-all"
                     >
                       <option value="">Select Experience</option>
-                      {PARTNER_EXPERIENCE_OPTIONS.map(option => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
+                      <option value="under-2">Under 2 Years</option>
+                      <option value="2-5">2 to 5 Years</option>
+                      <option value="5-10">5 to 10 Years</option>
+                      <option value="10-plus">10+ Years</option>
                     </select>
                   </div>
 
@@ -279,7 +237,6 @@ export default function PartnerFormSection() {
                       name="preferredLocation"
                       value={formData.preferredLocation}
                       onChange={handleChange}
-                      maxLength={200}
                       placeholder="e.g. Dholera SIR, Kasindra"
                       className="h-11 px-4 rounded-xl border border-[#e5e5e5] bg-white font-sans text-[14px] text-[#171717] focus:outline-none focus:border-[#2c578b] focus:ring-1 focus:ring-[#2c578b] transition-all"
                     />
@@ -301,7 +258,6 @@ export default function PartnerFormSection() {
                       name="companyName"
                       value={formData.companyName}
                       onChange={handleChange}
-                      maxLength={200}
                       placeholder="e.g. Apex Realty Partners"
                       className="h-11 px-4 rounded-xl border border-[#e5e5e5] bg-white font-sans text-[14px] text-[#171717] focus:outline-none focus:border-[#2c578b] focus:ring-1 focus:ring-[#2c578b] transition-all"
                     />
@@ -322,14 +278,8 @@ export default function PartnerFormSection() {
                       value={formData.clientsCount}
                       onChange={handleChange}
                       placeholder="e.g. 50+"
-                      maxLength={20}
-                      className={`h-11 px-4 rounded-xl border ${errors.clientsCount ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-[#e5e5e5] focus:border-[#2c578b] focus:ring-[#2c578b]"} bg-white font-sans text-[14px] text-[#171717] focus:outline-none focus:ring-1 transition-all`}
+                      className="h-11 px-4 rounded-xl border border-[#e5e5e5] bg-white font-sans text-[14px] text-[#171717] focus:outline-none focus:border-[#2c578b] focus:ring-1 focus:ring-[#2c578b] transition-all"
                     />
-                    {errors.clientsCount && (
-                      <span className="text-red-500 text-[12px] mt-1 font-sans">
-                        {errors.clientsCount}
-                      </span>
-                    )}
                   </div>
                 </div>
 
@@ -347,7 +297,6 @@ export default function PartnerFormSection() {
                     rows={4}
                     value={formData.message}
                     onChange={handleChange}
-                    maxLength={2000}
                     placeholder="Tell us more about your firm or client focus..."
                     className="p-4 rounded-xl border border-[#e5e5e5] bg-white font-sans text-[14px] text-[#171717] focus:outline-none focus:border-[#2c578b] focus:ring-1 focus:ring-[#2c578b] transition-all resize-none"
                   />
@@ -363,13 +312,13 @@ export default function PartnerFormSection() {
                       onChange={handleChange}
                       className="peer sr-only"
                     />
-                    <div className={`w-5 h-5 rounded border bg-white mt-0.5 flex items-center justify-center shrink-0 ${errors.consent ? "border-red-500" : "border-[#e5e5e5]"} peer-checked:bg-[#0B2545] peer-checked:border-[#0B2545] peer-checked:[&_svg]:opacity-100 peer-focus-visible:ring-2 peer-focus-visible:ring-[#2c578b]/40 transition-all duration-150`}>
+                    <div className="w-5 h-5 rounded border border-[#e5e5e5] bg-white mt-0.5 flex items-center justify-center shrink-0 peer-checked:bg-[#0B2545] peer-checked:border-[#0B2545] transition-all duration-150">
                       <svg
                         width="10"
                         height="8"
                         viewBox="0 0 10 8"
                         fill="none"
-                        className="text-white opacity-0 transition-opacity duration-150"
+                        className="text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-150"
                       >
                         <path
                           d="M1 4L4 7L9 1"
@@ -392,19 +341,12 @@ export default function PartnerFormSection() {
                   )}
                 </div>
 
-                {submitError && (
-                  <p className="font-sans text-[13px] text-red-500" role="alert">
-                    {submitError}
-                  </p>
-                )}
-
                 {/* Submit button */}
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="w-full h-12 !bg-[#0B2545] hover:bg-[#2C578B] !text-white font-sans text-[14px] font-semibold rounded-full flex items-center justify-center transition-all duration-200 active:scale-[0.98] shadow-md hover:shadow-lg mt-4 cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
+                  className="w-full h-12 !bg-[#0B2545] hover:bg-[#2C578B] !text-white font-sans text-[14px] font-semibold rounded-full flex items-center justify-center transition-all duration-200 active:scale-[0.98] shadow-md hover:shadow-lg mt-4 cursor-pointer"
                 >
-                  {isSubmitting ? "Submitting..." : "Become a Channel Partner"}
+                  Become a Channel Partner
                 </button>
               </motion.form>
             ) : (

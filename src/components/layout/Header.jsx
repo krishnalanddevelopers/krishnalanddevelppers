@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import MobileMenu from "./MobileMenu";
 
@@ -36,16 +35,10 @@ function ChevronDown() {
   );
 }
 
-// A nav link is active on its own page and on any page nested under it (e.g. /projects/kasindra)
-function isPathActive(pathname, href) {
-  if (href === "/") return pathname === "/";
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
-
 export default function Header() {
-  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeLink, setActiveLink] = useState("");
   const [openDropdown, setOpenDropdown] = useState(false);
   const navRef = useRef(null);
   const dropdownCloseTimer = useRef(null);
@@ -111,8 +104,8 @@ export default function Header() {
             {NAV_LINKS.map(({ label, href, hasDropdown, dropdownItems }) => {
               const isDropdownOpen = openDropdown === label;
               const isActive =
-                isPathActive(pathname, href) ||
-                dropdownItems?.some(item => isPathActive(pathname, item.href)) ||
+                activeLink === href ||
+                dropdownItems?.some(item => item.href === activeLink) ||
                 isDropdownOpen;
 
               if (hasDropdown && dropdownItems) {
@@ -166,7 +159,10 @@ export default function Header() {
                         <Link
                           key={item.label}
                           href={item.href}
-                          onClick={() => setOpenDropdown(false)}
+                          onClick={() => {
+                            setActiveLink(item.href);
+                            setOpenDropdown(false);
+                          }}
                           className={[
                             "block w-full text-left px-4 py-2.5",
                             "font-sans text-[14px] font-normal",
@@ -186,6 +182,7 @@ export default function Header() {
                 <Link
                   key={label}
                   href={href}
+                  onClick={() => setActiveLink(href)}
                   className={[
                     "group flex items-center gap-1",
                     "font-sans text-[16px] font-medium relative py-1",

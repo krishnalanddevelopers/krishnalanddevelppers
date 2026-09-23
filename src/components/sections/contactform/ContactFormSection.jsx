@@ -13,86 +13,51 @@ import {
   Sparkles,
 } from "lucide-react";
 import Link from "next/link";
-import { submitLead } from "@/lib/submitLead";
-import { toast } from "@/lib/toast";
-import {
-  INVALID_FORM_MESSAGE,
-  compactErrors,
-  focusFirstError,
-  toMobileDigits,
-  validateEmail,
-  validateMobile,
-  validateName,
-} from "@/lib/validation";
 import { useState } from "react";
 
 export default function ContactFormSection() {
   const [formData, setFormData] = useState({ name: "", email: "", mobile: "", message: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState("");
   const [errors, setErrors] = useState({});
   const [copied, setCopied] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Form input validation
   const validateForm = () => {
-    const message = formData.message.trim();
-    const newErrors = compactErrors({
-      name: validateName(formData.name),
-      email: validateEmail(formData.email),
-      mobile: validateMobile(formData.mobile),
-      message: !message
-        ? "Message cannot be empty"
-        : message.length < 10
-          ? "Message must be at least 10 characters"
-          : "",
-    });
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "Full Name is required";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+    if (!formData.mobile.trim()) {
+      newErrors.mobile = "Mobile Number is required";
+    } else if (!/^[0-9\s+-]{10,15}$/.test(formData.mobile)) {
+      newErrors.mobile = "Please enter a valid mobile number";
+    }
+    if (!formData.message.trim()) newErrors.message = "Message cannot be empty";
 
     setErrors(newErrors);
-    return newErrors;
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleInputChange = e => {
-    const { name } = e.target;
-    const value = name === "mobile" ? toMobileDigits(e.target.value) : e.target.value;
+    const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: "" }));
     }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    if (isSubmitting) return;
-    const newErrors = validateForm();
-    if (Object.keys(newErrors).length > 0) {
-      toast.error(INVALID_FORM_MESSAGE);
-      focusFirstError(e.currentTarget, newErrors);
-      return;
-    }
-
-    setIsSubmitting(true);
-    setSubmitError("");
-    try {
-      await submitLead({
-        formType: "Contact Us",
-        name: formData.name,
-        email: formData.email,
-        phone: formData.mobile,
-        message: formData.message,
-      });
+    if (validateForm()) {
       setIsSubmitted(true);
-      toast.success("Your enquiry has been submitted successfully!");
       setTimeout(() => {
         setIsSubmitted(false);
         setFormData({ name: "", email: "", mobile: "", message: "" });
       }, 5000);
-    } catch (error) {
-      setSubmitError(error.message);
-      toast.error(error.message);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -112,7 +77,7 @@ export default function ContactFormSection() {
       <div className="max-w-[1440px] mx-auto px-5 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           {/* ── Left Column: Need More Info Box & Contact Form ────────────────── */}
-          <div className="col-span-full lg:col-span-7 flex flex-col gap-8 w-full">
+          <div className="col-span-12 lg:col-span-7 flex flex-col gap-8 w-full">
             {/* 8.2 Need More Information Module */}
             <div className="rounded-[24px] border border-[#e5e5e5] bg-white overflow-hidden shadow-[0_4px_20px_rgba(11,37,69,0.02)] transition-all duration-300">
               <button
@@ -258,7 +223,7 @@ export default function ContactFormSection() {
                 )}
               </AnimatePresence>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                 <div className="flex flex-col gap-1.5 mb-2">
                   <h3 className="font-serif text-[22px] font-bold text-[#0B2545]">Enquiry Now</h3>
                   <p className="font-sans text-[13px] text-neutral-400 font-light">
@@ -272,7 +237,7 @@ export default function ContactFormSection() {
                     htmlFor="name"
                     className="font-sans text-[13px] font-semibold text-[#0B2545]"
                   >
-                    Full Name <span className="text-red-500">*</span>
+                    Full Name
                   </label>
                   <input
                     type="text"
@@ -295,7 +260,7 @@ export default function ContactFormSection() {
                       htmlFor="email"
                       className="font-sans text-[13px] font-semibold text-[#0B2545]"
                     >
-                      Email ID <span className="text-red-500">*</span>
+                      Email ID
                     </label>
                     <input
                       type="email"
@@ -319,17 +284,15 @@ export default function ContactFormSection() {
                       htmlFor="mobile"
                       className="font-sans text-[13px] font-semibold text-[#0B2545]"
                     >
-                      Mobile Number <span className="text-red-500">*</span>
+                      Mobile Number
                     </label>
                     <input
-                      type="tel"
-                      inputMode="numeric"
-                      maxLength={10}
+                      type="text"
                       id="mobile"
                       name="mobile"
                       value={formData.mobile}
                       onChange={handleInputChange}
-                      placeholder="10-digit mobile number"
+                      placeholder="Enter mobile number"
                       className={`w-full h-11 px-4 rounded-xl border ${errors.mobile ? "border-red-500 bg-red-50/[0.02]" : "border-[#e5e5e5] bg-[#fafafa]"} focus:border-[#2C578B] focus:bg-white transition-all font-sans text-[14px] outline-none`}
                     />
                     {errors.mobile && (
@@ -346,7 +309,7 @@ export default function ContactFormSection() {
                     htmlFor="message"
                     className="font-sans text-[13px] font-semibold text-[#0B2545]"
                   >
-                    Message / Query <span className="text-red-500">*</span>
+                    Message / Query
                   </label>
                   <textarea
                     id="message"
@@ -364,25 +327,18 @@ export default function ContactFormSection() {
                   )}
                 </div>
 
-                {submitError && (
-                  <p className="font-sans text-[13px] text-red-500" role="alert">
-                    {submitError}
-                  </p>
-                )}
-
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="w-full h-12 rounded-xl !bg-[#0B2545] hover:bg-[#2C578B] !text-white font-sans text-[14px] font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all duration-200 mt-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
+                  className="w-full h-12 rounded-xl !bg-[#0B2545] hover:bg-[#2C578B] !text-white font-sans text-[14px] font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all duration-200 mt-2 cursor-pointer"
                 >
-                  {isSubmitting ? "Sending..." : "Send Message"}
+                  Send Message
                 </button>
               </form>
             </div>
           </div>
 
           {/* ── Right Column: Contact Details & Google Earth maps ────────────────── */}
-          <div className="col-span-full lg:col-span-5 flex flex-col gap-8 w-full">
+          <div className="col-span-12 lg:col-span-5 flex flex-col gap-8 w-full">
             {/* 8.5 Contact Details Display */}
             <div className="rounded-[24px] border border-[#e5e5e5] bg-white p-6 sm:p-8 flex flex-col gap-6 shadow-[0_4px_20px_rgba(11,37,69,0.02)]">
               <h3 className="font-serif text-[18px] sm:text-[20px] font-bold text-[#0B2545]">

@@ -58,7 +58,7 @@ export default function BulkLandServices({ onInquiryClick }) {
 
       <div className="max-w-[1440px] mx-auto px-5 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start min-w-0">
         {/* Left Column: Title, Description & Direct Listings (7/12) */}
-        <div className="col-span-full lg:col-span-7 flex flex-col gap-6 w-full min-w-0">
+        <div className="col-span-12 lg:col-span-7 flex flex-col gap-6 w-full min-w-0">
           <div className="flex flex-col gap-4">
             <Badge
               icon={<Landmark size={12} className="text-[#2c578b]" />}
@@ -132,7 +132,7 @@ export default function BulkLandServices({ onInquiryClick }) {
         </div>
 
         {/* Right Column: Google Maps satellite view (5/12) */}
-        <div className="col-span-full lg:col-span-5 flex flex-col gap-6 w-full min-w-0 lg:sticky lg:top-24">
+        <div className="col-span-12 lg:col-span-5 flex flex-col gap-6 w-full min-w-0 lg:sticky lg:top-24">
           <div className="flex flex-col gap-2">
             <span className="font-sans text-[11px] font-semibold uppercase tracking-[1.5px] text-neutral-500 flex items-center gap-1.5">
               <MapPin size={12} className="text-[#2C578B]" /> Real Plot Map Display

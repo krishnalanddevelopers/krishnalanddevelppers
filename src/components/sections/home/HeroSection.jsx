@@ -48,13 +48,11 @@ const rightCardVariants = {
 
 export default function HeroSection() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [modalFormType, setModalFormType] = useState("Contact Us");
   useEffect(() => {
     // Timed popup: auto-open after 15 seconds
     const timer = setTimeout(() => {
       const dismissed = sessionStorage.getItem("heroQueryModalDismissed");
       if (!dismissed) {
-        setModalFormType("Contact Us");
         setIsContactModalOpen(true);
       }
     }, 15000);
@@ -63,7 +61,6 @@ export default function HeroSection() {
       if (e.clientY < 20) {
         const dismissed = sessionStorage.getItem("heroQueryModalDismissed");
         if (!dismissed) {
-          setModalFormType("Contact Us");
           setIsContactModalOpen(true);
           document.removeEventListener("mouseleave", handleMouseLeave);
         }
@@ -115,7 +112,7 @@ export default function HeroSection() {
             variants={containerVariants}
             initial="hidden"
             animate="show"
-            className="col-span-full lg:col-span-7 w-full flex flex-col gap-5"
+            className="col-span-12 lg:col-span-7 w-full flex flex-col gap-5"
           >
             {/* Badge pill */}
             <motion.div
@@ -157,20 +154,19 @@ export default function HeroSection() {
             >
               <button
                 type="button"
-                onClick={() => {
-                  setModalFormType("Book Site Visit");
-                  setIsContactModalOpen(true);
-                }}
+                onClick={() => setIsContactModalOpen(true)}
                 className="group inline-flex items-center justify-center gap-2 h-10 sm:h-11 px-5 sm:px-7 rounded-full !bg-white text-[#0B2545] !hover:text-[#0B2545] font-sans text-[13px] sm:text-[14px] font-medium leading-none shadow-[0px_4px_12px_rgba(255,255,255,0.15)] hover:shadow-[0px_8px_24px_rgba(44,87,139,0.25)] hover:bg-[#2C578B] active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
               >
                 Book Site Visit
               </button>
 
-              <Link
-                href="/dholera"
-                className="group inline-flex items-center justify-center gap-2 h-10 sm:h-11 px-5 sm:px-7 rounded-full !bg-white !text-[#0B2545] !hover:text-[#0B2545] font-sans text-[13px] sm:text-[14px] font-medium leading-none shadow-[0px_4px_12px_rgba(255,255,255,0.15)] hover:shadow-[0px_8px_24px_rgba(44,87,139,0.25)] hover:bg-[#2C578B] active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
-              >
-                Dholera SIR
+              <Link href="/dholera">
+                <button
+                  type="button"
+                  className="group inline-flex items-center justify-center gap-2 h-10 sm:h-11 px-5 sm:px-7 rounded-full !bg-white text-[#0B2545] !hover:text-[#0B2545] font-sans text-[13px] sm:text-[14px] font-medium leading-none shadow-[0px_4px_12px_rgba(255,255,255,0.15)] hover:shadow-[0px_8px_24px_rgba(44,87,139,0.25)] hover:bg-[#2C578B] active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
+                >
+                  Dholera SIR
+                </button>
               </Link>
             </motion.div>
           </motion.div>
@@ -180,7 +176,7 @@ export default function HeroSection() {
             variants={rightCardVariants}
             initial="hidden"
             animate="show"
-            className="hidden lg:block col-span-full lg:col-span-5 w-full lg:flex justify-start lg:justify-end"
+            className="hidden lg:block col-span-12 lg:col-span-5 w-full lg:flex justify-start lg:justify-end"
           >
             <div className="w-full max-w-[384px] rounded-[24px] bg-white/[0.06] border border-white/[0.08] backdrop-blur-2xl shadow-[0px_30px_60px_-16px_rgba(0,0,0,0.5)] p-8 flex flex-col gap-5 hover:bg-white/[0.08] transition-all duration-500">
               <div className="flex flex-col gap-1.5">
@@ -209,11 +205,7 @@ export default function HeroSection() {
           </motion.div>
         </div>
       </section>
-      <ContactQueryModal
-        isOpen={isContactModalOpen}
-        onClose={handleCloseModal}
-        formType={modalFormType}
-      />
+      <ContactQueryModal isOpen={isContactModalOpen} onClose={handleCloseModal} />
     </>
   );
 }

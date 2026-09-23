@@ -29,7 +29,7 @@ export default function TeamSection() {
     {
       name: "Tejas Shah",
       role: "Founder & Chairman",
-      image: "/Tejas.jpg",
+      image: "/Tejas.png",
     },
     {
       name: "Dhaarmin Shah",
