@@ -30,7 +30,7 @@ const cardVariants = {
 export default function ProjectsShowcaseSection() {
   // Map our ongoing projects to the existing project detail pages
   const projectLinks = {
-    dholeranavgam: "/projects/navagam",
+    dholeranavagam: "/projects/navagam",
     dholerakasindra: "/projects/kasindra",
     "oak-valley": "/services",
   };

@@ -32,7 +32,7 @@ export default function DholeraIntro() {
     <section className="w-full py-16 md:py-24 bg-white" aria-labelledby="intro-heading">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         {/* Left Column: Text Content & Highlights */}
-        <div className="col-span-12 lg:col-span-7 flex flex-col gap-6">
+        <div className="col-span-full lg:col-span-7 flex flex-col gap-6">
           <Badge label="Dholera Introduction" className="text-[#2c578b] bg-[#2c578b]/10 w-fit" />
 
           <h2
@@ -71,7 +71,7 @@ export default function DholeraIntro() {
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="col-span-12 lg:col-span-5 relative w-full aspect-square rounded-[24px] sm:rounded-[32px] border border-[#e5e5e5] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.06)] group bg-black"
+          className="col-span-full lg:col-span-5 relative w-full aspect-square rounded-[24px] sm:rounded-[32px] border border-[#e5e5e5] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.06)] group bg-black"
         >
           {/* HTML5 video elements */}
           <video

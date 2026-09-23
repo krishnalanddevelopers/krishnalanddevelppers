@@ -82,7 +82,7 @@ export default function FaqAccordion() {
         id: "p1",
         question: "What ongoing projects do you currently have?",
         answer:
-          "Our active premium residential plotting projects include Kasindra and Navgam, both strategically positioned close to active corridors and the smart city activation boundary.",
+          "Our active premium residential plotting projects include Kasindra and Navagam, both strategically positioned close to active corridors and the smart city activation boundary.",
       },
       {
         id: "p2",

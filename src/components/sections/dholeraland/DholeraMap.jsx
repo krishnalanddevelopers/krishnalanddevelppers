@@ -5,9 +5,13 @@ import { CheckCircle, Globe, Map } from "lucide-react";
 import Link from "next/link";
 
 export default function DholeraMap({ onInquiryClick }) {
-  const googleEarthUrl = "https://earth.google.com/web/search/Dholera,+Gujarat,+India";
+  // Google Maps 3D satellite view (tilted) centred on the official DSIR Boundary from the Dholera
+  // development-plan KMZ (polygon centroid 22.1820 N, 72.1898 E). Google Earth web is avoided:
+  // it opens its "Map projects" dashboard first.
+  const googleEarthUrl =
+    "https://www.google.com/maps/@22.182,72.1898,45000a,35y,45t/data=!3m1!1e3";
   const mapsEmbedUrl =
-    "https://maps.google.com/maps?q=Dholera,%20Gujarat,%20India&t=k&z=12&ie=UTF8&iwloc=&output=embed";
+    "https://maps.google.com/maps?q=22.182,72.1898&t=k&z=11&ie=UTF8&iwloc=&output=embed";
   const benefits = [
     "Government approved TP zoning maps",
     "Copies of NA-certified clear title deeds",
@@ -21,7 +25,7 @@ export default function DholeraMap({ onInquiryClick }) {
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         {/* Left Column: Get In Touch content & CTA */}
-        <div className="col-span-12 lg:col-span-6 flex flex-col gap-6">
+        <div className="col-span-full lg:col-span-6 flex flex-col gap-6">
           <Badge label="Get In Touch" className="text-[#2c578b] bg-[#2c578b]/10 w-fit" />
 
           <h2
@@ -73,7 +77,7 @@ export default function DholeraMap({ onInquiryClick }) {
         </div>
 
         {/* Right Column: Google Earth / Maps Embed */}
-        <div className="col-span-12 lg:col-span-6 relative w-full h-[400px] sm:h-[450px] rounded-[32px] overflow-hidden border border-[#e5e5e5] shadow-[0_12px_40px_rgba(0,0,0,0.04)] bg-[#f5f5f5] group">
+        <div className="col-span-full lg:col-span-6 relative w-full h-[400px] sm:h-[450px] rounded-[32px] overflow-hidden border border-[#e5e5e5] shadow-[0_12px_40px_rgba(0,0,0,0.04)] bg-[#f5f5f5] group">
           <iframe
             src={mapsEmbedUrl}
             width="100%"

@@ -60,15 +60,15 @@ const projectsData = [
   {
     id: "navagam",
     title: "Aurum Valley at Navagam",
-    location: "Navgam, Dholera SIR",
+    location: "Navagam, Dholera SIR",
     description:
       "A premium, fully-completed plotting and ready-to-construct farmhouse community near the international airport, offering excellent connectivity, weekend living, and strong long-term appreciation potentia",
     tags: ["Completed", "International Airport", "Ready Title"],
     images: [
-      "/gallery/navgam/clubhouse1.png",
-      "/gallery/navgam/Temple.png",
-      "/gallery/navgam/opengym1.png",
-      "/gallery/navgam/kidsplayaera.png",
+      "/gallery/navagam/clubhouse1.png",
+      "/gallery/navagam/Temple.png",
+      "/gallery/navagam/opengym1.png",
+      "/gallery/navagam/kidsplayaera.png",
       "/arielview.avif",
     ],
     href: "/navagam",

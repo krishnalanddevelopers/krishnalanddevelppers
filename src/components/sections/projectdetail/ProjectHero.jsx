@@ -30,6 +30,7 @@ export default function ProjectHero({
   subtitle,
   description,
   backgroundImage = "/sample-12.jpg",
+  brochureUrl,
   onBrochureClick,
   onLayoutClick,
 }) {
@@ -105,12 +106,22 @@ export default function ProjectHero({
             variants={itemVariants}
             className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto mt-2"
           >
-            <button
-              onClick={onBrochureClick}
-              className="w-full sm:w-auto h-11 px-6 rounded-full !bg-white hover:bg-[#f5f5f5] text-[#0B2545] font-sans text-[14px] font-medium transition-all duration-200 shadow-md active:scale-[0.98]"
-            >
-              Download Brochure
-            </button>
+            {brochureUrl ? (
+              <a
+                href={brochureUrl}
+                download
+                className="w-full sm:w-auto h-11 px-6 rounded-full !bg-white hover:bg-[#f5f5f5] !text-[#0B2545] font-sans text-[14px] font-medium transition-all duration-200 shadow-md active:scale-[0.98] inline-flex items-center justify-center"
+              >
+                Download Brochure
+              </a>
+            ) : (
+              <button
+                onClick={onBrochureClick}
+                className="w-full sm:w-auto h-11 px-6 rounded-full !bg-white hover:bg-[#f5f5f5] text-[#0B2545] font-sans text-[14px] font-medium transition-all duration-200 shadow-md active:scale-[0.98]"
+              >
+                Download Brochure
+              </button>
+            )}
             <button
               onClick={onLayoutClick}
               className="w-full sm:w-auto h-11 px-6 rounded-full border border-white/35 !bg-white/5 hover:bg-white/15 text-white font-sans text-[14px] font-medium backdrop-blur-[4px] transition-all duration-200 active:scale-[0.98]"
