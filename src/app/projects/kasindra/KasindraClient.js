@@ -20,7 +20,7 @@ const KASINDRA_BULLETS = [
 
 const KASINDRA_STATS = [
   { value: "920 km²", label: "Dholera SIR Area" },
-  { value: "222 Acre", label: "Aurum Valley Area" },
+  { value: "15 Acre", label: "Aurum Valley Area" },
   { value: "2026-27", label: "Possession Timeline" },
 ];
 
@@ -60,7 +60,7 @@ export default function KasindraClientPage() {
         subtitle="Where Health Meets Future-Ready Living"
         description="An ongoing master planned plotting and villa estate development by Krishna Land Developers, located in the rapidly growing Kasindra corridor. Integrating top-tier utilities and classical aesthetic planning to form a premium investment-grade community."
         backgroundImage="/aum.png"
-        onBrochureClick={handleOpenModal}
+        brochureUrl="/brochures/aum-antarim-kasindra-brochure.pdf"
         onLayoutClick={handleOpenModal}
       />
 
@@ -71,7 +71,7 @@ export default function KasindraClientPage() {
         description="Antrim Kasindra is an ongoing landmark plotting development in the prime Kasindra Growth Corridor, thoughtfully designed around health-oriented amenities for a healthier, more active lifestyle. With premium infrastructure, landscaped spaces, and modern community facilities, it offers a future-ready environment for both living and investment."
         bullets={KASINDRA_BULLETS}
         stats={KASINDRA_STATS}
-        layoutMapImage="/about-bg.png"
+        layoutMapImage="/gallery/kasindra/kasindra-layout.jpg"
       />
 
       {/* 3. Amenities Section */}

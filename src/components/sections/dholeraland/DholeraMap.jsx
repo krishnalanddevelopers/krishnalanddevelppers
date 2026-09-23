@@ -5,9 +5,11 @@ import { CheckCircle, Globe, Map } from "lucide-react";
 import Link from "next/link";
 
 export default function DholeraMap({ onInquiryClick }) {
-  const googleEarthUrl = "https://earth.google.com/web/search/Dholera,+Gujarat,+India";
+  // Clicking the map opens the in-site 3D viewer (/dholera/3d-map) with the Dholera development-plan
+  // KMZ layers, straight in 3D view.
+  const map3dUrl = "/dholera/3d-map?view=3d";
   const mapsEmbedUrl =
-    "https://maps.google.com/maps?q=Dholera,%20Gujarat,%20India&t=k&z=12&ie=UTF8&iwloc=&output=embed";
+    "https://maps.google.com/maps?q=22.182,72.1898&t=k&z=11&ie=UTF8&iwloc=&output=embed";
   const benefits = [
     "Government approved TP zoning maps",
     "Copies of NA-certified clear title deeds",
@@ -21,7 +23,7 @@ export default function DholeraMap({ onInquiryClick }) {
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         {/* Left Column: Get In Touch content & CTA */}
-        <div className="col-span-12 lg:col-span-6 flex flex-col gap-6">
+        <div className="col-span-full lg:col-span-6 flex flex-col gap-6">
           <Badge label="Get In Touch" className="text-[#2c578b] bg-[#2c578b]/10 w-fit" />
 
           <h2
@@ -73,7 +75,7 @@ export default function DholeraMap({ onInquiryClick }) {
         </div>
 
         {/* Right Column: Google Earth / Maps Embed */}
-        <div className="col-span-12 lg:col-span-6 relative w-full h-[400px] sm:h-[450px] rounded-[32px] overflow-hidden border border-[#e5e5e5] shadow-[0_12px_40px_rgba(0,0,0,0.04)] bg-[#f5f5f5] group">
+        <div className="col-span-full lg:col-span-6 relative w-full h-[400px] sm:h-[450px] rounded-[32px] overflow-hidden border border-[#e5e5e5] shadow-[0_12px_40px_rgba(0,0,0,0.04)] bg-[#f5f5f5] group">
           <iframe
             src={mapsEmbedUrl}
             width="100%"
@@ -86,28 +88,33 @@ export default function DholeraMap({ onInquiryClick }) {
             className="w-full h-full opacity-90 group-hover:opacity-100 transition-opacity duration-300"
           />
 
+          {/* Whole map is a link into the 3D viewer */}
+          <Link
+            href={map3dUrl}
+            aria-label="Open Dholera SIR in 3D view"
+            className="absolute inset-0 cursor-pointer"
+          />
+
           {/* Floated Action Card */}
           <div className="absolute bottom-5 right-5 left-5 sm:left-auto bg-black/60 backdrop-blur-md border border-white/10 rounded-2xl p-5 max-w-sm flex flex-col gap-3 shadow-xl text-white">
             <div className="flex flex-col gap-0.5">
               <span className="font-sans text-[10px] font-semibold uppercase tracking-[1.5px] text-white/50 flex items-center gap-1.5">
-                <Globe size={10} /> Google Earth View
+                <Globe size={10} /> 3D Map View
               </span>
               <h3 className="font-serif text-[16px] font-bold text-white leading-tight mt-1">
-                Explore in 3D Earth
+                Explore in 3D
               </h3>
               <p className="font-sans text-[11.5px] leading-[18px] text-white/60 font-light mt-0.5">
-                Visualize roads, runways, and zoning blocks in interactive 3D layout schemes.
+                Click the map to see TP schemes, expressway and zoning blocks in interactive 3D.
               </p>
             </div>
 
             <Link
-              href={googleEarthUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={map3dUrl}
               className="w-full h-9 bg-[#0B2545] text-[#fff] font-sans text-[12px] font-semibold rounded-full flex items-center justify-center gap-1.5 transition-all duration-200 hover:bg-[#2c578b] hover:text-white"
             >
               <Map size={13} />
-              Open Google Earth
+              Open 3D View
             </Link>
           </div>
         </div>
