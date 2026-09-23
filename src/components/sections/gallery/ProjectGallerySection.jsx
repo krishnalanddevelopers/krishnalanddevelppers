@@ -113,7 +113,7 @@ export default function ProjectGallerySection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-80px" }}
-          className="group relative col-span-12 lg:col-span-7
+          className="group relative col-span-full lg:col-span-7
                      h-[300px] sm:h-[380px] md:h-[440px] lg:h-[520px]
                      rounded-[24px] border border-[#e5e5e5] bg-[#f5f5f5]
                      overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-500"
@@ -150,7 +150,7 @@ export default function ProjectGallerySection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-80px" }}
-          className="col-span-12 lg:col-span-5 flex flex-col gap-4 sm:gap-6 w-full"
+          className="col-span-full lg:col-span-5 flex flex-col gap-4 sm:gap-6 w-full"
         >
           {/* Top Wide Video Card */}
           <motion.div

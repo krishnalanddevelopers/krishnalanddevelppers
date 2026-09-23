@@ -19,29 +19,29 @@ const NAVAGAM_BULLETS = [
 
 const NAVAGAM_STATS = [
   { value: "850 km²", label: "Dholera SIR Area" },
-  { value: "185 Acre", label: "Aurum Valley Area" },
+  { value: "8 Acre", label: "Aurum Valley Area" },
   { value: "Ready", label: "Possession Status" },
 ];
 
 const NAVAGAM_GALLERY_IMAGES = {
-  curvedBlue: "/gallery/navgam/2BHK_1.png",
-  skyscraper: "/gallery/navgam/2BHK_2.png",
-  bedroom: "/gallery/navgam/Club House (2).png",
-  tallVilla: "/gallery/navgam/2BHK_1.png",
-  studyRoom: "/gallery/navgam/cluehouse2.png",
-  poolHouse: "/gallery/navgam/kidsplayaera.png",
-  darkSkyscrapers: "/gallery/navgam/opengym1.png",
+  curvedBlue: "/gallery/navagam/2BHK_1.png",
+  skyscraper: "/gallery/navagam/2BHK_2.png",
+  bedroom: "/gallery/navagam/Club House (2).png",
+  tallVilla: "/gallery/navagam/2BHK_1.png",
+  studyRoom: "/gallery/navagam/cluehouse2.png",
+  poolHouse: "/gallery/navagam/kidsplayaera.png",
+  darkSkyscrapers: "/gallery/navagam/opengym1.png",
 };
 
 const NAVAGAM_AMENITIES = [
-  { label: "Clubhouse", image: "/gallery/navgam/clubhouse1.png" },
-  { label: "Theme Garden", image: "/gallery/navgam/theme-garden-spiral.jpg" },
-  { label: "Smart Utilities", image: "/gallery/navgam/smart-utilities-road.jpg" },
-  { label: "Indoor Games", image: "/gallery/navgam/cluehouse2.png" },
-  { label: "Children Play Area", image: "/gallery/navgam/kids.png" },
-  { label: "Sports Court", image: "/gallery/navgam/indoor-games-court.jpg" },
-  { label: "Gymnasium", image: "/gallery/navgam/Open Gym (3).png" },
-  { label: "Senior Citizen Area", image: "/gallery/navgam/mediarea.png" },
+  { label: "Clubhouse", image: "/gallery/navagam/clubhouse1.png" },
+  { label: "Theme Garden", image: "/gallery/navagam/theme-garden-spiral.jpg" },
+  { label: "Smart Utilities", image: "/gallery/navagam/smart-utilities-road.jpg" },
+  { label: "Indoor Games", image: "/gallery/navagam/cluehouse2.png" },
+  { label: "Children Play Area", image: "/gallery/navagam/kids.png" },
+  { label: "Sports Court", image: "/gallery/navagam/indoor-games-court.jpg" },
+  { label: "Gymnasium", image: "/gallery/navagam/Open Gym (3).png" },
+  { label: "Senior Citizen Area", image: "/gallery/navagam/mediarea.png" },
 ];
 
 export default function NavagamClientPage() {
@@ -59,7 +59,7 @@ export default function NavagamClientPage() {
         subtitle="Connected Living, Timeless Value."
         description="A premium, fully-completed plotting and farmhouse development by Krishna Land Developers, strategically located in the fast-growing Navagam region near the international airport. Designed for weekend living and long-term value, with ready-to-construct plots, premium infrastructure, and seamless connectivity."
         backgroundImage="/sample-12.jpeg"
-        onBrochureClick={handleOpenModal}
+        brochureUrl="/brochures/aurum-valley-navagam-brochure.pdf"
         onLayoutClick={handleOpenModal}
       />
 
@@ -70,7 +70,7 @@ export default function NavagamClientPage() {
         description="Aurum Valley Navagam is a premium, fully-completed plotting and farmhouse development, strategically located near the international airport. Designed for weekend living and long-term value, it combines lush green surroundings, modern infrastructure, secure planning, and excellent connectivity."
         bullets={NAVAGAM_BULLETS}
         stats={NAVAGAM_STATS}
-        layoutMapImage="/about-bg.png"
+        layoutMapImage="/gallery/navagam/aurum-valley-layout.jpg"
       />
 
       {/* 3. Amenities Section */}

@@ -1,6 +1,17 @@
 "use client";
 
 import { ongoingProjects } from "@/data/projects";
+import { submitLead } from "@/lib/submitLead";
+import { toast } from "@/lib/toast";
+import {
+  INVALID_FORM_MESSAGE,
+  compactErrors,
+  focusFirstError,
+  toMobileDigits,
+  validateEmail,
+  validateMobile,
+  validateName,
+} from "@/lib/validation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, ChevronDown, Loader2, LockKeyhole, X } from "lucide-react";
 import Image from "next/image";
@@ -22,15 +33,17 @@ const initialFormData = {
   consent: false,
 };
 
-export default function ContactQueryModal({ isOpen, onClose }) {
+export default function ContactQueryModal({ isOpen, onClose, formType = "Contact Us" }) {
   const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle");
+  const [submitError, setSubmitError] = useState("");
 
   const handleClose = useCallback(() => {
     setFormData(initialFormData);
     setErrors({});
     setStatus("idle");
+    setSubmitError("");
     onClose();
   }, [onClose]);
 
@@ -43,7 +56,7 @@ export default function ContactQueryModal({ isOpen, onClose }) {
   };
 
   const handlePhoneChange = e => {
-    const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, 10);
+    const digitsOnly = toMobileDigits(e.target.value);
     setFormData(prev => ({ ...prev, phone: digitsOnly }));
     if (errors.phone) {
       setErrors(prev => ({ ...prev, phone: "" }));
@@ -51,34 +64,45 @@ export default function ContactQueryModal({ isOpen, onClose }) {
   };
 
   const validate = () => {
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Full Name is required";
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Mobile Number is required";
-    } else if (!/^[0-9]{10}$/.test(formData.phone)) {
-      newErrors.phone = "Enter a valid 10-digit mobile number";
-    }
-    if (!formData.consent) newErrors.consent = "Please accept the privacy policy to continue";
+    const newErrors = compactErrors({
+      name: validateName(formData.name),
+      email: validateEmail(formData.email),
+      phone: validateMobile(formData.phone),
+      consent: formData.consent ? "" : "Please accept the privacy policy to continue",
+    });
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return newErrors;
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    if (!validate()) return;
+    if (status === "submitting") return;
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      toast.error(INVALID_FORM_MESSAGE);
+      focusFirstError(e.currentTarget, newErrors);
+      return;
+    }
 
     setStatus("submitting");
-    // TODO: replace with a real submission (API route + email delivery) once decided.
-    setTimeout(() => {
-      console.log("Contact query submitted:", formData);
+    setSubmitError("");
+    try {
+      await submitLead({
+        formType,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        project: formData.project,
+        message: formData.message,
+      });
       setStatus("success");
-    }, 900);
+      toast.success("Your query has been submitted successfully!");
+    } catch (error) {
+      setSubmitError(error.message);
+      toast.error(error.message);
+      setStatus("idle");
+    }
   };
 
   useEffect(() => {
@@ -363,6 +387,12 @@ export default function ContactQueryModal({ isOpen, onClose }) {
                           </span>
                         )}
                       </div>
+
+                      {submitError && (
+                        <p className="sm:col-span-2 text-[13px] text-red-500" role="alert">
+                          {submitError}
+                        </p>
+                      )}
 
                       <button
                         type="submit"

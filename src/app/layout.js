@@ -2,6 +2,7 @@ import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import SitewideCta from "@/components/layout/SitewideCta";
 import FloatingSocialIcons from "@/components/ui/FloatingSocialIcons";
+import Toaster from "@/components/ui/Toaster";
 import { Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
 
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
         <SitewideCta />
         <Footer />
         <FloatingSocialIcons />
+        <Toaster />
       </body>
     </html>
   );

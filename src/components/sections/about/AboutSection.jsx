@@ -68,7 +68,7 @@ export default function AboutSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-80px" }}
-          className="col-span-12 lg:col-span-7
+          className="col-span-full lg:col-span-7
                         relative flex flex-col justify-between gap-6
                         bg-white rounded-[24px] p-8 pb-12
                         border border-[#f0f0f0]
@@ -173,7 +173,7 @@ export default function AboutSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-80px" }}
-          className="col-span-12 lg:col-span-5
+          className="col-span-full lg:col-span-5
                         relative overflow-hidden rounded-[24px]
                         min-h-[360px] lg:min-h-[480px]
                         border border-[#f0f0f0]

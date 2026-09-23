@@ -1,10 +1,10 @@
 export const ongoingProjects = [
   {
-    id: "dholeranavgam",
+    id: "dholeranavagam",
     title: "Aurum Valley",
     location: "Navagam Project",
     progress: 72,
-    image: "/gallery/navgam/clubhouse1.png",
+    image: "/gallery/navagam/clubhouse1.png",
   },
   {
     id: "dholerakasindra",

@@ -7,7 +7,7 @@ const QUICK_LINKS = [
   { label: "About Us", href: "/about" },
   { label: "Projects", href: "/projects" },
   { label: "Services", href: "/services" },
-  { label: "Blog", href: "/#blog" },
+  { label: "Blog", href: "/blog" },
   { label: "FAQs", href: "/faq" },
 ];
 
@@ -36,7 +36,7 @@ const SOCIAL_LINKS = [
   },
   {
     label: "Twitter",
-    href: "https://twitter.com/your_twitter_handle",
+    href: "https://x.com/land_krishna",
     icon: FaSquareXTwitter,
   },
 ];
