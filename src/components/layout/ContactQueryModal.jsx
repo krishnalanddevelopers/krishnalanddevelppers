@@ -137,7 +137,7 @@ export default function ContactQueryModal({ isOpen, onClose, formType = "Contact
             role="dialog"
             aria-modal="true"
             aria-labelledby="contact-query-title"
-            className="relative grid max-h-[calc(100vh-32px)] w-full max-w-[960px] overflow-hidden rounded-[26px] bg-white shadow-[0_30px_90px_rgba(0,0,0,0.32)] lg:grid-cols-[44%_56%]"
+            className="relative grid max-h-[calc(100dvh-40px)] w-full max-w-[960px] overflow-hidden rounded-[26px] bg-white shadow-[0_30px_90px_rgba(0,0,0,0.32)] lg:grid-cols-[44%_56%]"
             initial={{ opacity: 0, y: 28, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.98 }}
@@ -206,8 +206,8 @@ export default function ContactQueryModal({ isOpen, onClose, formType = "Contact
               </div>
             </aside>
 
-            <div className="overflow-y-auto px-5 py-7 sm:px-9 sm:py-9 lg:px-9                         flex items-center">
-              <div className="w-full max-w-[430px] mx-auto">
+            <div className="flex max-h-[calc(100dvh-40px)] overflow-y-auto overscroll-contain px-5 py-7 sm:px-9 sm:py-9">
+              <div className="m-auto w-full max-w-[430px]">
                 {status === "success" ? (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.96 }}
@@ -246,7 +246,7 @@ export default function ContactQueryModal({ isOpen, onClose, formType = "Contact
                     <div className="mt-4 mb-6 border-b border-neutral-200/60" />
 
                     <form className="grid gap-4 sm:grid-cols-2" onSubmit={handleSubmit} noValidate>
-                      <label className="flex flex-col gap-1.5 text-[14px] font-medium text-[#0b2545]">
+                      <label className="flex min-w-0 flex-col gap-1.5 text-[14px] font-medium text-[#0b2545]">
                         <span>
                           Full Name <span className="text-red-500">*</span>
                         </span>
@@ -257,7 +257,7 @@ export default function ContactQueryModal({ isOpen, onClose, formType = "Contact
                           onChange={handleChange}
                           placeholder="Enter your name"
                           autoFocus
-                          className={`h-[52px] w-full rounded-[12px] border-[1.5px] bg-[#f5f5f5] px-4 text-[14px] text-[#171717] transition-all duration-200 placeholder:text-[#a3a3a3] outline-none ${
+                          className={`h-[52px] w-full rounded-[12px] border-[1.5px] bg-[#f5f5f5] px-4 text-[16px] text-[#171717] transition-all duration-200 sm:text-[14px] placeholder:text-[#a3a3a3] outline-none ${
                             errors.name ? "border-red-500" : "border-transparent"
                           }`}
                         />
@@ -268,7 +268,7 @@ export default function ContactQueryModal({ isOpen, onClose, formType = "Contact
                         )}
                       </label>
 
-                      <label className="flex flex-col gap-1.5 text-[14px] font-medium text-[#0b2545]">
+                      <label className="flex min-w-0 flex-col gap-1.5 text-[14px] font-medium text-[#0b2545]">
                         <span>
                           Email Address <span className="text-red-500">*</span>
                         </span>
@@ -278,7 +278,7 @@ export default function ContactQueryModal({ isOpen, onClose, formType = "Contact
                           value={formData.email}
                           onChange={handleChange}
                           placeholder="Enter your email"
-                          className={`h-[52px] w-full rounded-[12px] border-[1.5px] bg-[#f5f5f5] px-4 text-[14px] text-[#171717] transition-all duration-200 placeholder:text-[#a3a3a3] outline-none ${
+                          className={`h-[52px] w-full rounded-[12px] border-[1.5px] bg-[#f5f5f5] px-4 text-[16px] text-[#171717] transition-all duration-200 sm:text-[14px] placeholder:text-[#a3a3a3] outline-none ${
                             errors.email ? "border-red-500" : "border-transparent"
                           }`}
                         />
@@ -289,7 +289,7 @@ export default function ContactQueryModal({ isOpen, onClose, formType = "Contact
                         )}
                       </label>
 
-                      <label className="flex flex-col gap-1.5 text-[14px] font-medium text-[#0b2545]">
+                      <label className="flex min-w-0 flex-col gap-1.5 text-[14px] font-medium text-[#0b2545]">
                         <span>
                           Mobile Number <span className="text-red-500">*</span>
                         </span>
@@ -301,7 +301,7 @@ export default function ContactQueryModal({ isOpen, onClose, formType = "Contact
                           onChange={handlePhoneChange}
                           placeholder="Enter mobile number"
                           maxLength={10}
-                          className={`h-[52px] w-full rounded-[12px] border-[1.5px] bg-[#f5f5f5] px-4 text-[14px] text-[#171717] transition-all duration-200 placeholder:text-[#a3a3a3] outline-none ${
+                          className={`h-[52px] w-full rounded-[12px] border-[1.5px] bg-[#f5f5f5] px-4 text-[16px] text-[#171717] transition-all duration-200 sm:text-[14px] placeholder:text-[#a3a3a3] outline-none ${
                             errors.phone ? "border-red-500" : "border-transparent"
                           }`}
                         />
@@ -312,14 +312,14 @@ export default function ContactQueryModal({ isOpen, onClose, formType = "Contact
                         )}
                       </label>
 
-                      <label className="flex flex-col gap-1.5 text-[14px] font-medium text-[#0b2545]">
+                      <label className="flex min-w-0 flex-col gap-1.5 text-[14px] font-medium text-[#0b2545]">
                         Select Project
                         <div className="relative">
                           <select
                             name="project"
                             value={formData.project}
                             onChange={handleChange}
-                            className={`h-[52px] w-full appearance-none rounded-[12px] border-[1.5px] border-transparent bg-[#f5f5f5] px-4 pr-10 text-[14px] transition-all duration-200 outline-none  ${
+                            className={`h-[52px] w-full min-w-0 truncate appearance-none rounded-[12px] border-[1.5px] border-transparent bg-[#f5f5f5] px-4 pr-10 text-[16px] transition-all duration-200 outline-none sm:text-[14px] ${
                               formData.project ? "text-[#171717]" : "text-[#a3a3a3]"
                             }`}
                           >
@@ -342,7 +342,7 @@ export default function ContactQueryModal({ isOpen, onClose, formType = "Contact
                         </div>
                       </label>
 
-                      <label className="flex flex-col gap-1.5 text-[14px] font-medium text-[#0b2545] sm:col-span-2">
+                      <label className="flex min-w-0 flex-col gap-1.5 text-[14px] font-medium text-[#0b2545] sm:col-span-2">
                         Your Message
                         <textarea
                           name="message"
@@ -350,7 +350,7 @@ export default function ContactQueryModal({ isOpen, onClose, formType = "Contact
                           onChange={handleChange}
                           placeholder="Write your message here..."
                           rows={4}
-                          className="min-h-[110px] w-full resize-none rounded-[12px] border-[1.5px] border-transparent bg-[#f5f5f5] px-4 py-3 text-[14px] text-[#171717] transition-all duration-200 placeholder:text-[#a3a3a3] outline-none"
+                          className="min-h-[110px] w-full resize-none rounded-[12px] border-[1.5px] border-transparent bg-[#f5f5f5] px-4 py-3 text-[16px] text-[#171717] transition-all duration-200 sm:text-[14px] placeholder:text-[#a3a3a3] outline-none"
                         />
                       </label>
 
