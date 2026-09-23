@@ -5,11 +5,9 @@ import { CheckCircle, Globe, Map } from "lucide-react";
 import Link from "next/link";
 
 export default function DholeraMap({ onInquiryClick }) {
-  // Google Maps 3D satellite view (tilted) centred on the official DSIR Boundary from the Dholera
-  // development-plan KMZ (polygon centroid 22.1820 N, 72.1898 E). Google Earth web is avoided:
-  // it opens its "Map projects" dashboard first.
-  const googleEarthUrl =
-    "https://www.google.com/maps/@22.182,72.1898,45000a,35y,45t/data=!3m1!1e3";
+  // Clicking the map opens the in-site 3D viewer (/dholera/3d-map) with the Dholera development-plan
+  // KMZ layers, straight in 3D view.
+  const map3dUrl = "/dholera/3d-map?view=3d";
   const mapsEmbedUrl =
     "https://maps.google.com/maps?q=22.182,72.1898&t=k&z=11&ie=UTF8&iwloc=&output=embed";
   const benefits = [
@@ -90,28 +88,33 @@ export default function DholeraMap({ onInquiryClick }) {
             className="w-full h-full opacity-90 group-hover:opacity-100 transition-opacity duration-300"
           />
 
+          {/* Whole map is a link into the 3D viewer */}
+          <Link
+            href={map3dUrl}
+            aria-label="Open Dholera SIR in 3D view"
+            className="absolute inset-0 cursor-pointer"
+          />
+
           {/* Floated Action Card */}
           <div className="absolute bottom-5 right-5 left-5 sm:left-auto bg-black/60 backdrop-blur-md border border-white/10 rounded-2xl p-5 max-w-sm flex flex-col gap-3 shadow-xl text-white">
             <div className="flex flex-col gap-0.5">
               <span className="font-sans text-[10px] font-semibold uppercase tracking-[1.5px] text-white/50 flex items-center gap-1.5">
-                <Globe size={10} /> Google Earth View
+                <Globe size={10} /> 3D Map View
               </span>
               <h3 className="font-serif text-[16px] font-bold text-white leading-tight mt-1">
-                Explore in 3D Earth
+                Explore in 3D
               </h3>
               <p className="font-sans text-[11.5px] leading-[18px] text-white/60 font-light mt-0.5">
-                Visualize roads, runways, and zoning blocks in interactive 3D layout schemes.
+                Click the map to see TP schemes, expressway and zoning blocks in interactive 3D.
               </p>
             </div>
 
             <Link
-              href={googleEarthUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={map3dUrl}
               className="w-full h-9 bg-[#0B2545] text-[#fff] font-sans text-[12px] font-semibold rounded-full flex items-center justify-center gap-1.5 transition-all duration-200 hover:bg-[#2c578b] hover:text-white"
             >
               <Map size={13} />
-              Open Google Earth
+              Open 3D View
             </Link>
           </div>
         </div>
