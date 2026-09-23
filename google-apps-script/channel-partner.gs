@@ -7,12 +7,15 @@
  *      Execute as: Me
  *      Who has access: Anyone
  *    Authorize, then copy the Web app URL (ends with /exec) into the website's .env.local as
- *    GOOGLE_SHEETS_PARTNER_URL. SECRET below goes in as GOOGLE_SHEETS_PARTNER_SECRET.
+ *    GOOGLE_SHEETS_PARTNER_URL.
+ * 3. Project Settings (gear icon) > Script Properties > Add script property:
+ *      Property: SECRET    Value: the GOOGLE_SHEETS_PARTNER_SECRET value from .env.local
+ *    (The secret lives only in Script Properties, never in this file, so it stays out of git.)
  * After editing this script later, use Deploy > Manage deployments > Edit > New version
  * so the same URL keeps working.
  */
 
-const SECRET = "TEST_CHANNEL_PARTNER";
+const SECRET = PropertiesService.getScriptProperties().getProperty("SECRET");
 const SHEET_NAME = "Channel Partners";
 const HEADERS = [
   "Timestamp",
@@ -30,7 +33,7 @@ const HEADERS = [
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
-    if (data.secret !== SECRET) {
+    if (!SECRET || data.secret !== SECRET) {
       return json({ ok: false, error: "Unauthorized" });
     }
 

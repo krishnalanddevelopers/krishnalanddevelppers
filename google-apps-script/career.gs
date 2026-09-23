@@ -7,15 +7,17 @@
  *      Execute as: Me
  *      Who has access: Anyone
  *    Authorize (it asks for Sheets + Drive access), then copy the Web app URL (ends with /exec)
- *    into the website's .env.local as GOOGLE_SHEETS_CAREER_URL. SECRET below goes in as
- *    GOOGLE_SHEETS_CAREER_SECRET.
+ *    into the website's .env.local as GOOGLE_SHEETS_CAREER_URL.
  * Resumes are saved in a private Drive folder named FOLDER_NAME (created automatically); the
  * sheet stores a link to each file.
+ * 3. Project Settings (gear icon) > Script Properties > Add script property:
+ *      Property: SECRET    Value: the GOOGLE_SHEETS_CAREER_SECRET value from .env.local
+ *    (The secret lives only in Script Properties, never in this file, so it stays out of git.)
  * After editing this script later, use Deploy > Manage deployments > Edit > New version
  * so the same URL keeps working.
  */
 
-const SECRET = "TEST_CAREER";
+const SECRET = PropertiesService.getScriptProperties().getProperty("SECRET");
 const SHEET_NAME = "Career Applications";
 const FOLDER_NAME = "Career Resumes";
 const HEADERS = [
@@ -32,7 +34,7 @@ const HEADERS = [
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
-    if (data.secret !== SECRET) {
+    if (!SECRET || data.secret !== SECRET) {
       return json({ ok: false, error: "Unauthorized" });
     }
 

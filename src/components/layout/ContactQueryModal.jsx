@@ -33,7 +33,7 @@ const initialFormData = {
   consent: false,
 };
 
-export default function ContactQueryModal({ isOpen, onClose, formType = "Contact Us" }) {
+export default function ContactQueryModal({ isOpen, onClose, formType = "Enquiry" }) {
   const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle");

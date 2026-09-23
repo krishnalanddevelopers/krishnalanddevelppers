@@ -3,13 +3,14 @@
 
 const FIELD_LIMIT = 2000;
 
-// Each form type has its own sheet, web app URL and secret
+// Only the /contact page form goes to the Contact Us sheet; every other enquiry
+// (Book Site Visit button, enquiry popups) goes to the Book Site Visit sheet.
 const SHEETS = {
-  "Book Site Visit": {
+  bookVisit: {
     url: process.env.GOOGLE_SHEETS_BOOK_VISIT_URL,
     secret: process.env.GOOGLE_SHEETS_BOOK_VISIT_SECRET,
   },
-  "Contact Us": {
+  contact: {
     url: process.env.GOOGLE_SHEETS_CONTACT_URL,
     secret: process.env.GOOGLE_SHEETS_CONTACT_SECRET,
   },
@@ -25,8 +26,8 @@ export async function POST(request) {
     return Response.json({ ok: false, error: "Invalid request" }, { status: 400 });
   }
 
-  const formType = body.formType === "Book Site Visit" ? "Book Site Visit" : "Contact Us";
-  const sheet = SHEETS[formType];
+  const formType = ["Contact Us", "Book Site Visit"].includes(body.formType) ? body.formType : "Enquiry";
+  const sheet = formType === "Contact Us" ? SHEETS.contact : SHEETS.bookVisit;
   if (!sheet.url) {
     console.error(`Google Sheet web app URL for "${formType}" is not set`);
     return Response.json({ ok: false, error: "Lead storage is not configured" }, { status: 500 });
@@ -48,7 +49,7 @@ export async function POST(request) {
     const res = await fetch(sheet.url, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ ...lead, secret: sheet.secret ?? "" }),
+      body: JSON.stringify({ ...lead, formType, secret: sheet.secret ?? "" }),
       redirect: "follow",
     });
     const result = await res.json().catch(() => null);

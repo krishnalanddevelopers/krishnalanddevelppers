@@ -48,13 +48,13 @@ const rightCardVariants = {
 
 export default function HeroSection() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [modalFormType, setModalFormType] = useState("Contact Us");
+  const [modalFormType, setModalFormType] = useState("Enquiry");
   useEffect(() => {
     // Timed popup: auto-open after 15 seconds
     const timer = setTimeout(() => {
       const dismissed = sessionStorage.getItem("heroQueryModalDismissed");
       if (!dismissed) {
-        setModalFormType("Contact Us");
+        setModalFormType("Enquiry");
         setIsContactModalOpen(true);
       }
     }, 15000);
@@ -63,7 +63,7 @@ export default function HeroSection() {
       if (e.clientY < 20) {
         const dismissed = sessionStorage.getItem("heroQueryModalDismissed");
         if (!dismissed) {
-          setModalFormType("Contact Us");
+          setModalFormType("Enquiry");
           setIsContactModalOpen(true);
           document.removeEventListener("mouseleave", handleMouseLeave);
         }

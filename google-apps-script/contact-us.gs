@@ -1,5 +1,5 @@
 /**
- * Krishna Land Developers — "Contact Us" forms (contact page + enquiry popups) to Google Sheet.
+ * Krishna Land Developers — "Contact Us" page form (/contact only) to Google Sheet.
  *
  * Setup (one time):
  * 1. Open the Contact Us Google Sheet. Extensions > Apps Script, paste this whole file.
@@ -7,19 +7,22 @@
  *      Execute as: Me
  *      Who has access: Anyone
  *    Authorize, then copy the Web app URL (ends with /exec) into the website's .env.local as
- *    GOOGLE_SHEETS_CONTACT_URL. SECRET below goes in as GOOGLE_SHEETS_CONTACT_SECRET.
+ *    GOOGLE_SHEETS_CONTACT_URL.
+ * 3. Project Settings (gear icon) > Script Properties > Add script property:
+ *      Property: SECRET    Value: the GOOGLE_SHEETS_CONTACT_SECRET value from .env.local
+ *    (The secret lives only in Script Properties, never in this file, so it stays out of git.)
  * After editing this script later, use Deploy > Manage deployments > Edit > New version
  * so the same URL keeps working.
  */
 
-const SECRET = "TEST_CONTACT";
+const SECRET = PropertiesService.getScriptProperties().getProperty("SECRET");
 const SHEET_NAME = "Contact Us";
 const HEADERS = ["Timestamp", "Name", "Email", "Phone", "Project", "Message"];
 
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
-    if (data.secret !== SECRET) {
+    if (!SECRET || data.secret !== SECRET) {
       return json({ ok: false, error: "Unauthorized" });
     }
 
